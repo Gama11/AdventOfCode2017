@@ -22,19 +22,23 @@ class Day1 extends buddy.SingleSuite {
 
     function sum(input:String):Int {
         var sum = 0;
-        var prev = input.charAt(0);
-        var indices = [for (i in 1...input.length) i].concat([0]);
-        for (i in indices) {
-            var c = input.charAt(i);
-            if (prev == c) {
-                sum += Std.parseInt(c);
+        var a = (input : CircularAccess);
+        for (i in 0...input.length) {
+            if (a[i] == a[i + 1]) {
+                sum += Std.parseInt(a[i]);
             }
-            prev = c;
         }
         return sum;
     }
 
     function sum2(input:String):Int {
         return 0;
+    }
+}
+
+abstract CircularAccess(String) from String {
+    @:arrayAccess function get(i:Int):String {
+        i %= this.length;
+        return this.charAt(i);
     }
 }
