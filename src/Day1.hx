@@ -3,11 +3,19 @@ using buddy.Should;
 class Day1 extends buddy.SingleSuite {
     function new() {
         describe("Day1", {
-            it("tests", {
+            it("part1", {
                 sum("1122").should.be(3);
                 sum("1111").should.be(4);
                 sum("1234").should.be(0);
                 sum("91212129").should.be(9);
+            });
+
+            it("part2", {
+                sum("1212").should.be(6);
+                sum("1221").should.be(0);
+                sum("123425").should.be(4);
+                sum("123123").should.be(12);
+                sum("12131415").should.be(4);
             });
         });
     }
@@ -24,5 +32,9 @@ class Day1 extends buddy.SingleSuite {
             prev = c;
         }
         return sum;
+    }
+
+    function sum2(input:String):Int {
+        return 0;
     }
 }
