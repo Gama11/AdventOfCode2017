@@ -13,6 +13,16 @@ class Day1 extends buddy.SingleSuite {
     }
 
     function sum(input:String):Int {
-        return 0;
+        var sum = 0;
+        var prev = input.charAt(0);
+        var indices = [for (i in 1...input.length) i].concat([0]);
+        for (i in indices) {
+            var c = input.charAt(i);
+            if (prev == c) {
+                sum += Std.parseInt(c);
+            }
+            prev = c;
+        }
+        return sum;
     }
 }
