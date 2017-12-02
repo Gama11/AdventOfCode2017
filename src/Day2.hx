@@ -15,7 +15,7 @@ class Day2 extends buddy.SingleSuite {
     function checksum(spreadsheet:String) {
         var sum = 0;
         for (row in spreadsheet.split("\n")) {
-            var numbers = row.split(" ").map(Std.parseInt);
+            var numbers = ~/\s+/g.split(row).map(Std.parseInt);
             numbers.sort(Reflect.compare);
             var smallest = numbers[0];
             var largest = numbers[numbers.length - 1];
