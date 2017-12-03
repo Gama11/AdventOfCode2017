@@ -23,8 +23,28 @@ class Day3 extends buddy.SingleSuite {
                 steps(23).should.be(2);
                 steps(1024).should.be(31);
             });
+
+            it("part2", {
+                firstValueLargerThan(5).should.be(10);
+                firstValueLargerThan(26).should.be(54);
+                firstValueLargerThan(304).should.be(330);
+            });
         });
     }
+
+    var straightOperations = [
+        new Point(1, 0),  // right
+        new Point(0, -1), // up
+        new Point(-1, 0), // left
+        new Point(0, 1)   // down
+    ];
+
+    var diagonalOperations = [
+        new Point(1, 1),
+        new Point(1, -1),
+        new Point(-1, 1),
+        new Point(-1, -1)
+    ];
 
     function steps(square:Int):Int {
         return getPosition(square).distanceTo(new Point(0, 0));
@@ -42,23 +62,15 @@ class Day3 extends buddy.SingleSuite {
     function moveInSpiral(onStep:(index:Int, point:Point)->Bool) {
         var opCounter = 0;
         var step = 0;
-        var ops = [
-            new Point(1, 0),  // right
-            new Point(0, -1), // up
-            new Point(-1, 0), // left
-            new Point(0, 1)   // down
-        ];
+        var ops = straightOperations;
+        var index = 0;
+        var point = new Point(0, 0);
 
-        var i = 0;
-        var x = 0;
-        var y = 0;
-
-        while (onStep(i, new Point(x, y))) {
+        while (onStep(index, point)) {
             var op = ops[opCounter % ops.length];
-            x += op.x;
-            y += op.y;
+            point = point.add(op);
             step++;
-            i++;
+            index++;
 
             var stepsPerOp = Std.int(opCounter / 2) + 1;
             if (step >= stepsPerOp) {
@@ -66,6 +78,26 @@ class Day3 extends buddy.SingleSuite {
                 step = 0;
             }
         }
+    }
+
+    function firstValueLargerThan(searchValue:Int):Int {
+        var points = new haxe.ds.HashMap();
+        var ops = [].concat(straightOperations).concat(diagonalOperations);
+        var result = 0;
+        moveInSpiral((index, point) -> {
+            var value = if (index == 0) 1 else 0;
+            for (op in ops) {
+                var adjacentValue = points.get(point.add(op));
+                if (adjacentValue != null) {
+                    value += adjacentValue;
+                }
+            }
+
+            points.set(point, value);
+            result = value;
+            return value <= searchValue;
+        });
+        return result;
     }
 }
 
@@ -78,7 +110,19 @@ class Point {
         this.y = y;
     }
 
+    public function hashCode():Int {
+        return x + 10000 * y;
+    }
+
+    public function add(point:Point):Point {
+        return new Point(x + point.x, y + point.y);
+    }
+
     public function distanceTo(point:Point):Int {
         return Std.int(Math.abs(x - point.x)) + Std.int(Math.abs(y - point.y));
+    }
+
+    function toString() {
+        return '($x, $y)';
     }
 }
