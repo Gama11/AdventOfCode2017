@@ -31,6 +31,15 @@ class Day3 extends buddy.SingleSuite {
     }
 
     function getPosition(square:Int):Point {
+        var result = null;
+        moveInSpiral((index, point) -> {
+            result = point;
+            return index + 1 < square;
+        });
+        return result;
+    }
+
+    function moveInSpiral(onStep:(index:Int, point:Point)->Bool) {
         var opCounter = 0;
         var step = 0;
         var ops = [
@@ -40,13 +49,16 @@ class Day3 extends buddy.SingleSuite {
             new Point(0, 1)   // down
         ];
 
+        var i = 0;
         var x = 0;
         var y = 0;
-        for (i in 1...square) {
+
+        while (onStep(i, new Point(x, y))) {
             var op = ops[opCounter % ops.length];
             x += op.x;
             y += op.y;
             step++;
+            i++;
 
             var stepsPerOp = Std.int(opCounter / 2) + 1;
             if (step >= stepsPerOp) {
@@ -54,7 +66,6 @@ class Day3 extends buddy.SingleSuite {
                 step = 0;
             }
         }
-        return new Point(x, y);
     }
 }
 
