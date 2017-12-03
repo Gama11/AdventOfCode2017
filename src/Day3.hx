@@ -27,7 +27,7 @@ class Day3 extends buddy.SingleSuite {
     }
 
     function steps(square:Int):Int {
-        return 0;
+        return getPosition(square).distanceTo(new Point(0, 0));
     }
 
     function getPosition(square:Int):Point {
@@ -65,5 +65,9 @@ class Point {
     public function new(x, y) {
         this.x = x;
         this.y = y;
+    }
+
+    public function distanceTo(point:Point):Int {
+        return Std.int(Math.abs(x - point.x)) + Std.int(Math.abs(y - point.y));
     }
 }
