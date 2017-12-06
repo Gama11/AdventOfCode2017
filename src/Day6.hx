@@ -4,23 +4,32 @@ class Day6 extends buddy.SingleSuite {
     function new() {
         describe("Day6", {
             it("part1", {
-                countRedistributionCycles("0 2 7 0").should.be(5);
+                analyzeRedistribution("0 2 7 0").cycles.should.be(5);
+            });
+
+            it("part2", {
+                analyzeRedistribution("0 2 7 0").loopSize.should.be(4);
             });
         });
     }
 
-    function countRedistributionCycles(input:String):Int {
+    function analyzeRedistribution(input:String) {
         var banks = ~/[ \t]+/g.split(input).map(Std.parseInt);
         var seenPatterns = [];
+        var seenIndex = -1;
         var cycles = 0;
 
         do {
             seenPatterns.push(banks.join(" "));
             redistribute(getLargestBank(banks), banks);
             cycles++;
-        } while (seenPatterns.indexOf(banks.join(" ")) == -1);
+            seenIndex = seenPatterns.indexOf(banks.join(" "));
+        } while (seenIndex == -1);
 
-        return cycles;
+        return {
+            cycles: cycles,
+            loopSize: cycles - seenIndex
+        };
     }
 
     function getLargestBank(banks:Array<Int>):Int {
