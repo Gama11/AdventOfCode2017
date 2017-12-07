@@ -37,14 +37,14 @@ cntj (57)");
             var lineRegex = ~/(\w+) \(([0-9]+)\)(?: -> ([\w, ]+))?/;
             lineRegex.match(line.trim());
             var name = lineRegex.matched(1);
-            var id = Std.parseInt(lineRegex.matched(2));
+            var weight = Std.parseInt(lineRegex.matched(2));
             var group3 = lineRegex.matched(3);
             var children = if (group3 == null) [] else group3.split(", ");
             
             parts[name] = if (children.length > 0) {
-                Node([for (child in children) Leaf(child, 0)], name, id);
+                Node([for (child in children) Leaf(child, 0)], name, weight);
             } else {
-                Leaf(name, id);
+                Leaf(name, weight);
             }
         }
 
@@ -92,7 +92,7 @@ cntj (57)");
 
     function findBalanceWeight(tower:Tower):Null<Int> {
         switch (tower) {
-            case Node(children, _, weight):
+            case Node(children, _, _):
                 var weights =  children.map(calculateWeight);
                 for (i in 0...weights.length) {
                     if (weights.count(w -> w == weights[i]) == 1) {
