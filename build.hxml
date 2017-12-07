@@ -1,6 +1,6 @@
 -cp src
 -D analyzer-optimize
--main Day6
+-main Day7
 --interp
 -lib buddy
 -D dump=pretty
