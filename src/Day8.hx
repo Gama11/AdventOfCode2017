@@ -4,12 +4,18 @@ using StringTools;
 class Day8 extends buddy.SingleSuite {
     function new() {
         describe("Day8", {
-            it("part1", {
-                getLargestRegister(execute(parse(
+            var instructions = parse(
 "b inc 5 if a > 1
 a inc 1 if b < 5
 c dec -10 if a >= 1
-c inc -20 if c == 10"))).should.be(1);
+c inc -20 if c == 10");
+
+            it("part1", {
+                getLargestRegister(execute(instructions).registers).should.be(1);
+            });
+
+            it("part2", {
+                execute(instructions).largestValue.should.be(10);
             });
         });
     }
@@ -43,7 +49,7 @@ c inc -20 if c == 10"))).should.be(1);
         });
     }
 
-    function execute(instructions:Array<Instruction>):Map<String, Int> {
+    function execute(instructions:Array<Instruction>) {
         var registers = new Map<String, Int>();
         function getRegister(name:String):Int {
             if (registers[name] == null) {
@@ -52,6 +58,7 @@ c inc -20 if c == 10"))).should.be(1);
             return registers[name];
         }
 
+        var largestValue = 0;
         for (instruction in instructions) {
             function eval(instruction:Instruction) {
                 switch (instruction) {
@@ -69,8 +76,13 @@ c inc -20 if c == 10"))).should.be(1);
                 }
             }
             eval(instruction);
+            largestValue = Std.int(Math.max(largestValue, getLargestRegister(registers)));
         }
-        return registers;
+
+        return {
+            registers: registers,
+            largestValue: largestValue
+        };
     }
 
     function compare(operator:ComparisonOperator, a:Int, b:Int):Bool {
