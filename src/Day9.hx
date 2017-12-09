@@ -34,19 +34,19 @@ class Day9 extends buddy.SingleSuite {
         var inGarbage = false;
         var i = 0;
         while (i < stream.length) {
-            switch (stream.charAt(i)) {
-                case "{" if (!inGarbage):
+            switch [stream.charAt(i), inGarbage] {
+                case ["{", false]:
                     level++;
-                case "}" if (!inGarbage):
+                case ["}", false]:
                     score += level;
                     level--;
-                case "<" if (!inGarbage):
+                case ["<", false]:
                     inGarbage = true;
-                case ">":
+                case [">", true]:
                     inGarbage = false;
-                case "!" if (inGarbage):
+                case ["!", true]:
                     i++;
-                case _ if (inGarbage):
+                case [_, true]:
                     garbageCharacters++;
                 case _:
             }
