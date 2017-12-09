@@ -4,21 +4,33 @@ class Day9 extends buddy.SingleSuite {
     function new() {
         describe("Day9", {
             it("part1", {
-                calculateStreamScore("{}").should.be(1);
-                calculateStreamScore("{{{}}}").should.be(6);
-                calculateStreamScore("{{},{}}").should.be(5);
-                calculateStreamScore("{{{},{},{{}}}}").should.be(16);
-                calculateStreamScore("{<a>,<a>,<a>,<a>}").should.be(1);
-                calculateStreamScore("{{<ab>},{<ab>},{<ab>},{<ab>}}").should.be(9);
-                calculateStreamScore("{{<!!>},{<!!>},{<!!>},{<!!>}}").should.be(9);
-                calculateStreamScore("{{<a!>},{<a!>},{<a!>},{<ab>}}").should.be(3);
+                analyzeStream("{}").score.should.be(1);
+                analyzeStream("{{{}}}").score.should.be(6);
+                analyzeStream("{{},{}}").score.should.be(5);
+                analyzeStream("{{{},{},{{}}}}").score.should.be(16);
+                analyzeStream("{<a>,<a>,<a>,<a>}").score.should.be(1);
+                analyzeStream("{{<ab>},{<ab>},{<ab>},{<ab>}}").score.should.be(9);
+                analyzeStream("{{<!!>},{<!!>},{<!!>},{<!!>}}").score.should.be(9);
+                analyzeStream("{{<a!>},{<a!>},{<a!>},{<ab>}}").score.should.be(3);
+            });
+
+            it("part2", {
+                analyzeStream("<>").garbageCharacters.should.be(0);
+                analyzeStream("<random characters>").garbageCharacters.should.be(17);
+                analyzeStream("<<<<>").garbageCharacters.should.be(3);
+                analyzeStream("<{!>}>").garbageCharacters.should.be(2);
+                analyzeStream("<!!>").garbageCharacters.should.be(0);
+                analyzeStream("<!!!>>").garbageCharacters.should.be(0);
+                analyzeStream("<{o\"i!a,<{i<a>").garbageCharacters.should.be(10);
             });
         });
     }
 
-    function calculateStreamScore(stream:String):Int {
-        var level = 0;
+    function analyzeStream(stream:String) {
         var score = 0;
+        var garbageCharacters = 0;
+
+        var level = 0;
         var inGarbage = false;
         var i = 0;
         while (i < stream.length) {
@@ -28,16 +40,22 @@ class Day9 extends buddy.SingleSuite {
                 case "}" if (!inGarbage):
                     score += level;
                     level--;
-                case "<":
+                case "<" if (!inGarbage):
                     inGarbage = true;
                 case ">":
                     inGarbage = false;
                 case "!" if (inGarbage):
                     i++;
+                case _ if (inGarbage):
+                    garbageCharacters++;
                 case _:
             }
             i++;
         }
-        return score;
+
+        return {
+            score: score,
+            garbageCharacters: garbageCharacters
+        };
     }
 }
