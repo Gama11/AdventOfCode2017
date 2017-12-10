@@ -1,4 +1,5 @@
 using buddy.Should;
+using Lambda;
 
 class Day10 extends buddy.SingleSuite {
     function new() {
@@ -14,8 +15,15 @@ class Day10 extends buddy.SingleSuite {
                 reversePartition(a, 4, 1);
                 assertEquals(a, [0, 4, 2, 3, 1]);
 
-                assertEquals(knotHash(5, "3,4,1,5"), [3, 4, 2, 1, 0]);
+                assertEquals(knot(5, [3, 4, 1, 5], 1), [3, 4, 2, 1, 0]);
                 multiplyFirstTwoElements([3, 4, 2, 1, 0]).should.be(12);
+            });
+
+            it("part2", {
+                knotHash("").should.be("a2582a3a0e66e6e86e3812dcb672a272");
+                knotHash("AoC 2017").should.be("33efeb34ea91902bb2f59c9920caa6cd");
+                knotHash("1,2,3").should.be("3efbe78a8d82f29979031a4aa0b16a9d");
+                knotHash("1,2,4").should.be("63960835bcdc130f0b66d7ff4f6a5a8e");
             });
         });
     }
@@ -41,17 +49,19 @@ class Day10 extends buddy.SingleSuite {
         iterateRange(index -> a[index] = partition[i++]);
     }
 
-    function knotHash(listSize:Int, lengths:String):Array<Int> {
+    function knot(listSize:Int, lengths:Array<Int>, rounds:Int):Array<Int> {
         var position = 0;
         var skipSize = 0;
         var list = [for (i in 0...listSize) i];
 
-        for (length in lengths.split(",").map(Std.parseInt)) {
-            if (length > 1) {
-                reversePartition(list, position, (position + length - 1) % listSize);
+        for (i in 0...rounds) {
+            for (length in lengths) {
+                if (length > 1) {
+                    reversePartition(list, position, (position + length - 1) % listSize);
+                }
+                position = (position + length + skipSize) % listSize;
+                skipSize++;
             }
-            position = (position + length + skipSize) % listSize;
-            skipSize++;
         }
 
         return list;
@@ -59,5 +69,17 @@ class Day10 extends buddy.SingleSuite {
 
     function multiplyFirstTwoElements(a:Array<Int>):Int {
         return a[0] * a[1];
+    }
+
+    function knotHash(input:String):String {
+        var lengths = input.split("")
+            .map(char -> char.charCodeAt(0))
+            .concat([17, 31, 73, 47, 23]);
+        var sparseHash = knot(256, lengths, 64);
+        var denseHash = [];
+        for (i in 0...16) {
+            denseHash[i] = [for (j in 0...16) sparseHash[i * 16 + j]].fold((a, b) -> a ^ b, 0);
+        }
+        return denseHash.map(StringTools.hex.bind(_, 2)).map(s -> s.toLowerCase()).join("");
     }
 }
