@@ -15,7 +15,7 @@ class Day10 extends buddy.SingleSuite {
                 assertEquals(a, [0, 4, 2, 3, 1]);
 
                 assertEquals(knotHash(5, "3,4,1,5"), [3, 4, 2, 1, 0]);
-                multiplyFirstTwoElelements([3, 4, 2, 1, 0]).should.be(12);
+                multiplyFirstTwoElements([3, 4, 2, 1, 0]).should.be(12);
             });
         });
     }
@@ -34,7 +34,7 @@ class Day10 extends buddy.SingleSuite {
 
         var partition = [];
         iterateRange(index -> partition.push(a[index]));
-        
+
         partition.reverse();
 
         var i = 0;
@@ -47,7 +47,9 @@ class Day10 extends buddy.SingleSuite {
         var list = [for (i in 0...listSize) i];
 
         for (length in lengths.split(",").map(Std.parseInt)) {
-            reversePartition(list, position, (position + length - 1) % listSize);
+            if (length > 1) {
+                reversePartition(list, position, (position + length - 1) % listSize);
+            }
             position = (position + length + skipSize) % listSize;
             skipSize++;
         }
@@ -55,7 +57,7 @@ class Day10 extends buddy.SingleSuite {
         return list;
     }
 
-    function multiplyFirstTwoElelements(a:Array<Int>):Int {
+    function multiplyFirstTwoElements(a:Array<Int>):Int {
         return a[0] * a[1];
     }
 }
