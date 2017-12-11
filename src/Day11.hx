@@ -1,3 +1,4 @@
+import util.IntMath;
 using buddy.Should;
 
 class Day11 extends buddy.SingleSuite {
@@ -16,11 +17,11 @@ class Day11 extends buddy.SingleSuite {
     }
 
     function getSteps(position:Point):Int {
-        var absX = Std.int(Math.abs(position.x));
-        var absY = Std.int(Math.abs(position.y));
+        var absX = IntMath.abs(position.x);
+        var absY = IntMath.abs(position.y);
 
         if (position.x > 0 && position.y < 0 || position.x < 0 && position.y > 0) {
-            return Std.int(Math.max(absX, absY));
+            return IntMath.max(absX, absY);
         }
         return absX + absY;
     }
@@ -51,10 +52,10 @@ class Day11 extends buddy.SingleSuite {
         return {x: x, y: y};
     }
 
-    function getFurthestPosition(path:String):Int {
+    function getFurthestSteps(path:String):Int {
         var maxSteps = 0;
         walkPath(path, point -> {
-            maxSteps = Std.int(Math.max(maxSteps, getSteps(point)));
+            maxSteps = IntMath.max(maxSteps, getSteps(point));
         });
         return maxSteps;
     }

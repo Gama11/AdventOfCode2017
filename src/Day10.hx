@@ -1,3 +1,4 @@
+import util.IntMath;
 using buddy.Should;
 using Lambda;
 
@@ -30,7 +31,7 @@ class Day10 extends buddy.SingleSuite {
 
     function reversePartition(a:Array<Int>, lo:Int, hi:Int) {
         function iterateRange(f:(index:Int)->Void) {
-            var length = Std.int(Math.abs(hi - lo + 1));
+            var length = IntMath.abs(hi - lo + 1);
             if (lo > hi) {
                 length = a.length - length;
             }

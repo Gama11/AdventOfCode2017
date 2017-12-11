@@ -1,3 +1,4 @@
+import util.IntMath;
 using buddy.Should;
 
 class Day3 extends buddy.SingleSuite {
@@ -119,7 +120,7 @@ class Point {
     }
 
     public function distanceTo(point:Point):Int {
-        return Std.int(Math.abs(x - point.x)) + Std.int(Math.abs(y - point.y));
+        return IntMath.abs(x - point.x) + IntMath.abs(y - point.y);
     }
 
     function toString() {
