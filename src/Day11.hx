@@ -4,19 +4,18 @@ class Day11 extends buddy.SingleSuite {
     function new() {
         describe("Day11", {
             it("part1", {
-                getDistanceToOrigin("ne,ne,ne").should.be(3);
-                getDistanceToOrigin("ne,ne,sw,sw").should.be(0);
-                getDistanceToOrigin("ne,ne,s,s").should.be(2);
-                getDistanceToOrigin("se,sw,se,sw,sw").should.be(3);
+                getSteps(walkPath("ne,ne,ne")).should.be(3);
+                getSteps(walkPath("ne,ne,sw,sw")).should.be(0);
+                getSteps(walkPath("ne,ne,s,s")).should.be(2);
+                getSteps(walkPath("se,sw,se,sw,sw")).should.be(3);
 
-                getDistanceToOrigin("n,ne").should.be(2);
-                getDistanceToOrigin("n,ne,se").should.be(2);
+                getSteps(walkPath("n,ne")).should.be(2);
+                getSteps(walkPath("n,ne,se")).should.be(2);
             });
         });
     }
 
-    function getDistanceToOrigin(path:String):Int {
-        var position = findHexagonPosition(path);
+    function getSteps(position:Point):Int {
         var absX = Std.int(Math.abs(position.x));
         var absY = Std.int(Math.abs(position.y));
 
@@ -26,7 +25,7 @@ class Day11 extends buddy.SingleSuite {
         return absX + absY;
     }
 
-    function findHexagonPosition(path:String):Point {
+    function walkPath(path:String, ?onStep:Point->Void):Point {
         var x = 0;
         var y = 0;
 
@@ -43,9 +42,21 @@ class Day11 extends buddy.SingleSuite {
 
                 case _:
             }
+
+            if (onStep != null) {
+                onStep({x: x, y: y});
+            }
         }
 
         return {x: x, y: y};
+    }
+
+    function getFurthestPosition(path:String):Int {
+        var maxSteps = 0;
+        walkPath(path, point -> {
+            maxSteps = Std.int(Math.max(maxSteps, getSteps(point)));
+        });
+        return maxSteps;
     }
 }
 
