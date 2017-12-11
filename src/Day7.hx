@@ -4,7 +4,7 @@ using Lambda;
 
 class Day7 extends buddy.SingleSuite {
     function new() {
-        describe("Day2", {
+        describe("Day7", {
             var tower = buildTower(
 "pbga (66)
 xhth (57)
