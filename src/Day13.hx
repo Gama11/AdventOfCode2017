@@ -1,4 +1,3 @@
-import util.IntMath;
 using buddy.Should;
 using Lambda;
 
@@ -23,14 +22,11 @@ class Day13 extends buddy.SingleSuite {
 
     function parseInput(input:String):Array<Scanner> {
         var scanners = [];
-        var maxDepth = 0;
         for (line in input.split("\n")) {
             var properties = line.split(": ").map(Std.parseInt);
             var depth = properties[0];
             var range = properties[1];
             scanners[depth] = {depth: depth, range: range};
-
-            maxDepth = IntMath.max(maxDepth, depth);
         }
         return scanners;
     }
