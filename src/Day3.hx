@@ -1,4 +1,4 @@
-import util.IntMath;
+import util.Point;
 using buddy.Should;
 
 class Day3 extends buddy.SingleSuite {
@@ -99,31 +99,5 @@ class Day3 extends buddy.SingleSuite {
             return value <= searchValue;
         });
         return result;
-    }
-}
-
-class Point {
-    public final x:Int;
-    public final y:Int;
-
-    public function new(x, y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public function hashCode():Int {
-        return x + 10000 * y;
-    }
-
-    public function add(point:Point):Point {
-        return new Point(x + point.x, y + point.y);
-    }
-
-    public function distanceTo(point:Point):Int {
-        return IntMath.abs(x - point.x) + IntMath.abs(y - point.y);
-    }
-
-    function toString() {
-        return '($x, $y)';
     }
 }

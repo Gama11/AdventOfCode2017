@@ -53,7 +53,7 @@ class Day12 extends buddy.SingleSuite {
         return collectConnections(start, [start]);
     }
 
-    function countGroups(input:String) {
+    function countGroups(input:String):Int {
         var connections = parseConnections(input);
         var visitedPrograms = [];
         var groups = 0;
