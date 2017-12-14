@@ -1,5 +1,5 @@
 -cp src
 -D analyzer-optimize
--main Day13
+-main Day14
 --interp
 -lib buddy

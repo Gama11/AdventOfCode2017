@@ -29,7 +29,7 @@ class Day10 extends buddy.SingleSuite {
         });
     }
 
-    function reversePartition(a:Array<Int>, lo:Int, hi:Int) {
+    static function reversePartition(a:Array<Int>, lo:Int, hi:Int) {
         function iterateRange(f:(index:Int)->Void) {
             var length = IntMath.abs(hi - lo + 1);
             if (lo > hi) {
@@ -50,7 +50,7 @@ class Day10 extends buddy.SingleSuite {
         iterateRange(index -> a[index] = partition[i++]);
     }
 
-    function knot(listSize:Int, lengths:Array<Int>, rounds:Int):Array<Int> {
+    static function knot(listSize:Int, lengths:Array<Int>, rounds:Int):Array<Int> {
         var position = 0;
         var skipSize = 0;
         var list = [for (i in 0...listSize) i];
@@ -72,7 +72,7 @@ class Day10 extends buddy.SingleSuite {
         return a[0] * a[1];
     }
 
-    function knotHash(input:String):String {
+    public static function knotHash(input:String):String {
         var lengths = input.split("")
             .map(char -> char.charCodeAt(0))
             .concat([17, 31, 73, 47, 23]);
