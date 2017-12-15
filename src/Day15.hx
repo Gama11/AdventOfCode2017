@@ -1,38 +1,71 @@
 using buddy.Should;
-using util.StringTools;
-using StringTools;
 using haxe.Int64;
 
 class Day15 extends buddy.SingleSuite {
     function new() {
         describe("Day15", {
             it("part1", {
-                calculateJudgeCount(65, 8921).should.be(588);
+                calculateJudgeCount1(65, 8921).should.be(588);
+            });
+
+            it("part2", {
+                calculateJudgeCount2(65, 8921).should.be(309);
             });
         });
     }
 
-    function calculateJudgeCount(seedA:Int, seedB:Int):Int {
+    function areEqual(a:Int, b:Int):Bool {
+        return a & 0xFFFF == b & 0xFFFF;
+    }
+
+    function calculateJudgeCount1(seedA:Int, seedB:Int):Int {
         var count = 0;
-        generatePairs(seedA, seedB, 40000000, (a, b) -> {
-            if (a == b) {
+        var pairs = 0;
+        generatePairs(seedA, seedB, (a, b) -> {
+            if (areEqual(a, b)) {
                 count++;
             }
+            pairs++;
+            return pairs < 40000000;
         });
         return count;
     }
 
-    function generatePairs(seedA:Int, seedB:Int, amount:Int, onGenerate:(a:String, b:String)->Void) {
-        inline function toBinary(n:Int64) {
-            return n.toInt().toBinary().lpad("0", 16).substr(-16);
-        }
+    function calculateJudgeCount2(seedA:Int, seedB:Int):Int {
+        var count = 0;
+        var pairs = 0;
+        var valuesA = new List();
+        var valuesB = new List();
 
+        generatePairs(seedA, seedB, (a, b) -> {
+            if (a % 4 == 0) {
+                valuesA.add(a);
+            }
+            if (b % 8 == 0) {
+                valuesB.add(b);
+            }
+
+            if (valuesA.length > 0 && valuesB.length > 0) {
+                if (areEqual(valuesA.pop(), valuesB.pop())) {
+                    count++;
+                }
+                pairs++;
+            }
+
+            return pairs < 5000000;
+        });
+        return count;
+    }
+
+    function generatePairs(seedA:Int, seedB:Int, onGenerate:(a:Int, b:Int)->Bool) {
         var a:Int64 = seedA;
         var b:Int64 = seedB;
-        for (i in 0...amount) {
+        while (true) {
             a = (a * 16807) % 2147483647;
             b = (b * 48271) % 2147483647;
-            onGenerate(toBinary(a), toBinary(b));
+            if (!onGenerate(a.toInt(), b.toInt())) {
+                break;
+            }
         }
     }
 }
