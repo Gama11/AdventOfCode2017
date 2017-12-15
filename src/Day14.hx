@@ -76,7 +76,7 @@ class Day14 extends buddy.SingleSuite {
                     }
                     var neighborSquare = grid[neighbor.x][neighbor.y];
                     if (neighborSquare != Used) {
-                        continue;                        
+                        continue;
                     }
 
                     region = regions.get(neighbor);
@@ -85,7 +85,7 @@ class Day14 extends buddy.SingleSuite {
 
                 if (region == null) {
                     regions.set(point, regionCount);
-                    regionCount++;                        
+                    regionCount++;
                 } else {
                     regions.set(point, region);
                 }

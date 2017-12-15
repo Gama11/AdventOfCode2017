@@ -1,5 +1,6 @@
 -cp src
 -D analyzer-optimize
--main Day14
---interp
+-main Day15
+# --interp
 -lib buddy
+-java export/java
