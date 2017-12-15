@@ -13,22 +13,26 @@ class Day15 extends buddy.SingleSuite {
     }
 
     function calculateJudgeCount(seedA:Int, seedB:Int):Int {
+        var count = 0;
+        generatePairs(seedA, seedB, 40000000, (a, b) -> {
+            if (a == b) {
+                count++;
+            }
+        });
+        return count;
+    }
+
+    function generatePairs(seedA:Int, seedB:Int, amount:Int, onGenerate:(a:String, b:String)->Void) {
         inline function toBinary(n:Int64) {
             return n.toInt().toBinary().lpad("0", 16).substr(-16);
         }
 
-        var valueA:Int64 = seedA;
-        var valueB:Int64 = seedB;
-
-        var count = 0;
-        for (i in 0...40000000) {
-            valueA = (valueA * 16807) % 2147483647;
-            valueB = (valueB * 48271) % 2147483647;
-            
-            if (toBinary(valueA) == toBinary(valueB)) {
-                count++;
-            }
+        var a:Int64 = seedA;
+        var b:Int64 = seedB;
+        for (i in 0...amount) {
+            a = (a * 16807) % 2147483647;
+            b = (b * 48271) % 2147483647;
+            onGenerate(toBinary(a), toBinary(b));
         }
-        return count;
     }
 }
