@@ -4,7 +4,7 @@ class Day16 extends buddy.SingleSuite {
     function new() {
         describe("Day16", {
             it("part1", {
-                dance(parse("s1,x3/4,pe/b"), 5).should.be("baedc");
+                dance(parse("s1,x3/4,pe/b"), 5, 1).should.be("baedc");
             });
         });
     }
@@ -28,26 +28,39 @@ class Day16 extends buddy.SingleSuite {
         });
     }
 
-    function dance(moves:Array<DanceMove>, programs:Int):String {
+    function dance(moves:Array<DanceMove>, programs:Int, dances:Int):String {
         var programs = [for (i in 0...programs) String.fromCharCode(97 + i)];
-        for (move in moves) {
-            switch (move) {
-                case Spin(count):
-                    for (i in 0...count) {
-                        programs.unshift(programs.pop());
-                    }
+        var initialSequence = programs.join("");
+        var cycleSize = 0;
 
-                case Exchange(a, b):
-                    swap(programs, a, b);
+        var i = 0;
+        while (i < dances) {
+            for (move in moves) {
+                switch (move) {
+                    case Spin(count):
+                        for (i in 0...count) {
+                            programs.unshift(programs.pop());
+                        }
 
-                case Partner(a, b):
-                    swap(programs, programs.indexOf(a), programs.indexOf(b));
+                    case Exchange(a, b):
+                        swap(programs, a, b);
+
+                    case Partner(a, b):
+                        swap(programs, programs.indexOf(a), programs.indexOf(b));
+                }
+            }
+
+            cycleSize++;
+            i++;
+            if (programs.join("") == initialSequence) {
+                var cycles = Std.int((dances - i) / cycleSize);
+                i += cycles * cycleSize;
             }
         }
         return programs.join("");
     }
 
-    function swap<T>(a:Array<T>, index1:Int, index2:Int) {
+    inline function swap<T>(a:Array<T>, index1:Int, index2:Int) {
         var temp = a[index1];
         a[index1] = a[index2];
         a[index2] = temp;
