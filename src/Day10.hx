@@ -1,4 +1,5 @@
 import util.IntMath;
+import utest.Assert;
 using buddy.Should;
 using Lambda;
 
@@ -6,17 +7,11 @@ class Day10 extends buddy.SingleSuite {
     function new() {
         describe("Day10", {
             it("part1", {
-                function assertEquals(a:Array<Int>, b:Array<Int>) {
-                    for (i in 0...a.length) {
-                        a[i].should.be(b[i]);
-                    }
-                }
-                
                 var a = [0, 1, 2, 3, 4];
                 reversePartition(a, 4, 1);
-                assertEquals(a, [0, 4, 2, 3, 1]);
+                Assert.same([0, 4, 2, 3, 1], a);
 
-                assertEquals(knot(5, [3, 4, 1, 5], 1), [3, 4, 2, 1, 0]);
+                Assert.same([3, 4, 2, 1, 0], knot(5, [3, 4, 1, 5], 1));
                 multiplyFirstTwoElements([3, 4, 2, 1, 0]).should.be(12);
             });
 

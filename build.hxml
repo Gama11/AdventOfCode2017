@@ -1,6 +1,7 @@
 -cp src
 -D analyzer-optimize
--main Day15
-# --interp
+-D eval-stack
+-main Day16
+--interp
 -lib buddy
--java export/java
+-lib utest
