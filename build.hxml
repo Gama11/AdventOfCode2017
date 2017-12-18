@@ -1,7 +1,7 @@
 -cp src
 -D analyzer-optimize
 -D eval-stack
--main Day17
+-main Day18
 --interp
 -lib buddy
 -lib utest
