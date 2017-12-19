@@ -25,6 +25,14 @@ class Point {
         return x == point.x && y == point.y;
     }
 
+    public function isHorizontal():Bool {
+        return Math.abs(x) > 0;
+    }
+
+    public function isVertical():Bool {
+        return Math.abs(y) > 0;
+    }
+
     function toString() {
         return '($x, $y)';
     }

@@ -13,33 +13,28 @@ class Day19 extends buddy.SingleSuite {
      A  |  C    
  F---|----E|--+ 
      |  |  |  D 
-     +B-+  +--+"
+     +B-+  +--+ "
                 ).should.be("ABCDEF");
             });
         });
     }
 
     function followPath(input:String):String {
-        var grid = input.split("\n").map(line -> line.split(""));
+        var grid = input.split("\n").map(line -> line.replace("\r", "").split(""));
         var position = new Point(grid[0].indexOf("|"), 0);
         var direction = Down;
         var letters = "";
 
-        function isOnGrid(position:Point):Bool {
-            return position.x >= 0 && position.x < grid[0].length &&
-                position.y >= 0 && position.y < grid.length; 
-        }
-
-        while (isOnGrid(position)) {
+        while (isOnGrid(grid, position)) {
             var cell = grid[position.y][position.x];
             if (~/[A-Z]/.match(cell)) {
                 letters += cell;
             }
 
             var options = switch (cell) {
-                case "|" if (direction == Up || direction == Down):
+                case "|" if (direction.isVertical()):
                     [Up, Down];
-                case "-" if (direction == Left || direction == Right):
+                case "-" if (direction.isHorizontal()):
                     [Left, Right];
                 case "+":
                     [Up, Down, Left, Right];
@@ -48,15 +43,19 @@ class Day19 extends buddy.SingleSuite {
             }
             options.remove(opposite(direction));
 
-            for (option in options) {
-                var target = position.add(option);
-                if (isOnGrid(target) && grid[target.y][target.x] != " ") {
-                    direction = option;
-                    break;
-                }
-            }
+            options = options.filter(point -> {
+                var target = position.add(point);
+                return isOnGrid(grid, target) && grid[target.y][target.x] != " ";
+            });
 
-            position = position.add(direction);
+            if (options.length > 1) {
+                throw 'ambigious movement at $position: $options';
+            } else if (options.length == 1) {
+                direction = options[0];
+                position = position.add(direction);                
+            } else {
+                break;
+            }
         }
         return letters;
     }
@@ -69,4 +68,11 @@ class Day19 extends buddy.SingleSuite {
             case Right: Left;
         }
     }
+
+    function isOnGrid(grid:Grid, position:Point):Bool {
+        return position.x >= 0 && position.x < grid[0].length
+            && position.y >= 0 && position.y < grid.length; 
+    }
 }
+
+typedef Grid = Array<Array<String>>;
