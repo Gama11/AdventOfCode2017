@@ -1,5 +1,6 @@
 import Day10.knotHash;
-import util.Point;
+import util.Grid;
+import util.Grid.Movement.*;
 import haxe.ds.HashMap;
 using buddy.Should;
 using Lambda;
@@ -53,12 +54,7 @@ class Day14 extends buddy.SingleSuite {
     function countRegions(grid:Grid):Int {
         var regions = new HashMap<Point, Int>();
         var regionCount = 0;
-
-        var left = new Point(-1, 0);
-        var up = new Point(0, -1);
-        var down = new Point(0, 1);
-        var right = new Point(1, 0);
-        var operations = [up, left, down, right];
+        var operations = [Up, Left, Down, Right];
 
         for (x in 0...128) {
             for (y in 0...128) {
@@ -90,8 +86,8 @@ class Day14 extends buddy.SingleSuite {
                     regions.set(point, region);
                 }
 
-                var leftRegion = regions.get(point.add(left));
-                var aboveRegion = regions.get(point.add(up));
+                var leftRegion = regions.get(point.add(Left));
+                var aboveRegion = regions.get(point.add(Up));
                 if (leftRegion != null && aboveRegion != null && leftRegion != aboveRegion) {
                     for (point in regions.keys()) {
                         if (regions.get(point) == leftRegion) {

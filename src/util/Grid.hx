@@ -29,3 +29,10 @@ class Point {
         return '($x, $y)';
     }
 }
+
+class Movement {
+    public static final Left = new Point(-1, 0);
+    public static final Up = new Point(0, -1);
+    public static final Down = new Point(0, 1);
+    public static final Right = new Point(1, 0);
+}

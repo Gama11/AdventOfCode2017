@@ -1,4 +1,5 @@
-import util.Point;
+import util.Grid;
+import util.Grid.Movement.*;
 using buddy.Should;
 
 class Day3 extends buddy.SingleSuite {
@@ -33,12 +34,7 @@ class Day3 extends buddy.SingleSuite {
         });
     }
 
-    var straightOperations = [
-        new Point(1, 0),  // right
-        new Point(0, -1), // up
-        new Point(-1, 0), // left
-        new Point(0, 1)   // down
-    ];
+    var straightOperations = [Right, Up, Left, Down];
 
     var diagonalOperations = [
         new Point(1, 1),
