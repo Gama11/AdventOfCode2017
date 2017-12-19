@@ -6,24 +6,30 @@ using StringTools;
 class Day19 extends buddy.SingleSuite {
     function new() {
         describe("Day19", {
-            it("part1", {
-                followPath(
+            var input =
 "     |          
      |  +--+    
      A  |  C    
  F---|----E|--+ 
      |  |  |  D 
-     +B-+  +--+ "
-                ).should.be("ABCDEF");
+     +B-+  +--+ ";
+
+            it("part1", {
+                followPath(input).letters.should.be("ABCDEF");
+            });
+
+            it("part2", {
+                followPath(input).steps.should.be(38);
             });
         });
     }
 
-    function followPath(input:String):String {
+    function followPath(input:String) {
         var grid = input.split("\n").map(line -> line.replace("\r", "").split(""));
         var position = new Point(grid[0].indexOf("|"), 0);
         var direction = Down;
         var letters = "";
+        var steps = 1;
 
         while (isOnGrid(grid, position)) {
             var cell = grid[position.y][position.x];
@@ -52,12 +58,17 @@ class Day19 extends buddy.SingleSuite {
                 throw 'ambigious movement at $position: $options';
             } else if (options.length == 1) {
                 direction = options[0];
-                position = position.add(direction);                
+                position = position.add(direction);
+                steps++;
             } else {
                 break;
             }
         }
-        return letters;
+
+        return {
+            letters: letters,
+            steps: steps
+        };
     }
 
     function opposite(direction:Point):Point {
