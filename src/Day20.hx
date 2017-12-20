@@ -9,6 +9,15 @@ class Day20 extends buddy.SingleSuite {
 p=< 4,0,0>, v=< 0,0,0>, a=<-2,0,0>"
                 ).should.be(0);
             });
+
+            it("part2", {
+                getFinalParticleCount(
+"p=<-6,0,0>, v=< 3,0,0>, a=< 0,0,0>
+p=<-4,0,0>, v=< 2,0,0>, a=< 0,0,0>
+p=<-2,0,0>, v=< 1,0,0>, a=< 0,0,0>
+p=< 3,0,0>, v=<-1,0,0>, a=< 0,0,0>"
+                ).should.be(1);
+            });
         });
     }
 
@@ -48,6 +57,45 @@ p=< 4,0,0>, v=< 0,0,0>, a=<-2,0,0>"
             }
         }
         return closest;
+    }
+
+    function simulate(particles:Array<Particle>) {
+        function add(a:Point3D, b:Point3D) {
+            a.x += b.x;
+            a.y += b.y;
+            a.z += b.z;
+        }
+        for (particle in particles) {
+            add(particle.velocity, particle.acceleration);
+            add(particle.position, particle.velocity);
+        }
+    }
+
+    function getFinalParticleCount(input:String):Int {
+        var particles = parse(input);
+        for (i in 0...100) {
+            simulate(particles);
+
+            for (particle in findCollisions(particles)) {
+                particles.remove(particle);
+            }
+        }
+        return particles.length;
+    }
+
+    function findCollisions(particles:Array<Particle>):Array<Particle> {
+        function equals(a:Point3D, b:Point3D) {
+            return a.x == b.x && a.y == b.y && a.z == b.z;
+        }
+        var collisions = [];
+        for (p1 in particles) {
+            for (p2 in particles) {
+                if (p1 != p2 && equals(p1.position, p2.position)) {
+                    collisions.push(p1);
+                }
+            }
+        }
+        return collisions;
     }
 }
 
