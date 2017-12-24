@@ -1,5 +1,5 @@
-using haxe.Int64;
 using StringTools;
+using haxe.Int64;
 
 class Day23 extends buddy.SingleSuite {
     function new() {
@@ -37,6 +37,8 @@ jnz 1 3
 sub b -17
 jnz 1 -23"
         )));
+
+        trace(part2(false));
     }
 
     function parse(input:String):Array<Instruction> {
@@ -100,6 +102,50 @@ jnz 1 -23"
         }
 
         return multiplications;
+    }
+
+    function part2(debug:Bool) {
+        var d, g, h = 0;
+        var f = false;
+
+        var b = 99;
+        var c = 99;
+
+        if (!debug) {
+            b *= 100;
+            b += 100000;
+            c = b;
+            c += 17000;
+        }
+
+        while (true) {
+            f = false;
+            d = 2;
+
+            do {
+                if (b % d == 0) {
+                    f = true;
+                }
+                d++;
+                g = d;
+                g -= b;
+            } while (g != 0);
+
+            if (f) {
+                h++;
+            }
+
+            g = b;
+            g -= c;
+
+            if (g == 0) {
+                break;
+            }
+
+            b += 17;
+        }
+
+        return h;
     }
 }
 
